@@ -1,4 +1,6 @@
 #include "server_macro.h"
+#include "faculty_admin.h"
+#include "./file_data/faculty.h"
 #include "./file_data/student.h"
 #include<fcntl.h>
 #include<string.h>
@@ -11,72 +13,123 @@ void view_student_details(int client_FD);
 void modify_student(int client_FD);
 char writeBuffer[1500] , readBuffer[50];
 struct student stud;
-void admin_menu(int client_FD)
+struct Faculty facul;
+
+/*bool check_login_status(int client_FD)
 {
-    int admin_choice;
-    do{
-        printf("back to pavilion\n");
-    if(write(client_FD , ADMIN_MENU , strlen(ADMIN_MENU)) == -1) {
+    memset(readBuffer, 0, sizeof(readBuffer));
+    if(write(client_FD , ADMIN_LOGIN , strlen(ADMIN_LOGIN)) == -1) {
         perror("Write system call error\n");
     }
-        memset(readBuffer, 0, sizeof(readBuffer));
-    if(read(client_FD,readBuffer,sizeof(readBuffer)) == -1)
+    read(client_FD, readBuff , sizeof(readBuff));
+    if(srtrcmp(readBuffer , ) == 0)
     {
-        perror("read system call error : while reading user input from client\n");
-    }
-    admin_choice = atoi(readBuffer);
-
-        switch(admin_choice)
-        {
-            case 1:
-                 add_student(client_FD);
-                printf("I am back to case 1\n");
-                memset(writeBuffer, 0, sizeof(writeBuffer));
-                printf("middel0\n");
-                strcat(writeBuffer , "Student added successfully\n");
-                printf("middle1\n");
-                strcat(writeBuffer , "Student initial password is: ");
-                printf("middle2\n");
-                strcat(writeBuffer, stud.pwd);
-                printf("middle3\n");
-                strcat(writeBuffer, "\n");
-                printf("middle4\n");
-                strcat(writeBuffer , "Student login id is: ");
-                printf("middle5\n");
-                strcat(writeBuffer, stud.loginid);
-                printf("middle6\n");
-                strcat(writeBuffer, "\n");
-                printf("done \n");
-                break;
-            case 2:
-                view_student_details(client_FD);
-                printf("back to case 2\n");
-                memset(writeBuffer, 0, sizeof(writeBuffer));
-                break;
-            case 3:
-                modify_student(client_FD);
-                printf("back to case 3\n");
-                memset(writeBuffer, 0, sizeof(writeBuffer));
-                break;
-            default:
-                printf("add menu later\n");
-                exit(0);
-        }
-        printf("continue or not\n");
-        strcat(writeBuffer, "Do you wish to operate admin menu again: yes/no: \n");
-        printf("write case out1\n");
-        if(write(client_FD , writeBuffer , strlen(writeBuffer)) == -1)
-            perror("write error");
-        printf("write case out2\n");
+        if(write(client_FD , ADMIN_PWD , strlen(ADMIN_PWD)) == -1)
+            perror("Write system call error\n");
         memset(readBuffer, 0, sizeof(readBuffer));
-        printf("write case out3\n");
-        if(read(client_FD , readBuffer , sizeof(readBuffer))==-1)
-            perror("read error");
-        printf("last line\n");
-    } while(strcmp(readBuffer , "yes") == 0);
-
-}
-
+        read(client_FD, readBuffer , sizeof(readBuffer));
+        if(strcmp(readBuffer,) == 0)
+            return true;
+        else
+            return false;
+    }
+    else
+        return false;
+    
+}*/
+void admin_menu(int client_FD)
+{
+   // bool check_login_status(client_FD);
+   // if(bool == true)
+    //{
+        int admin_choice;
+        do{
+            printf("back to pavilion\n");
+            if(write(client_FD , ADMIN_MENU , strlen(ADMIN_MENU)) == -1) {
+                perror("Write system call error\n");
+            }
+            memset(readBuffer, 0, sizeof(readBuffer));
+            if(read(client_FD,readBuffer,sizeof(readBuffer)) == -1)
+            {
+                perror("read system call error : while reading user input from client\n");
+            }
+            admin_choice = atoi(readBuffer);
+            
+            switch(admin_choice)
+            {
+                case 1:
+                    add_student(client_FD);
+                    printf("I am back to case 1\n");
+                    memset(writeBuffer, 0, sizeof(writeBuffer));
+                    printf("middel0\n");
+                    strcat(writeBuffer , "Student added successfully\n");
+                    printf("middle1\n");
+                    strcat(writeBuffer , "Student initial password is: ");
+                    printf("middle2\n");
+                    strcat(writeBuffer, stud.pwd);
+                    printf("middle3\n");
+                    strcat(writeBuffer, "\n");
+                    printf("middle4\n");
+                    strcat(writeBuffer , "Student login id is: ");
+                    printf("middle5\n");
+                    strcat(writeBuffer, stud.loginid);
+                    printf("middle6\n");
+                    strcat(writeBuffer, "\n");
+                    printf("done \n");
+                    break;
+                case 2:
+                    view_student_details(client_FD);
+                    printf("back to case 2\n");
+                    memset(writeBuffer, 0, sizeof(writeBuffer));
+                    break;
+                case 3:
+                    modify_student(client_FD);
+                    printf("back to case 3\n");
+                    memset(writeBuffer, 0, sizeof(writeBuffer));
+                    break;
+                case 4:
+                    add_faculty(client_FD);
+                    printf("back to case 4\n");
+                    memset(writeBuffer, 0, sizeof(writeBuffer));
+                    strcat(writeBuffer , "Faculty added successfully\n");
+                    strcat(writeBuffer , "Faculty initial password is: ");
+                    strcat(writeBuffer, facul.faculty_pwd);
+                    strcat(writeBuffer, "\n");
+                    break;
+                case 5:
+                    view_faculty_details(client_FD);
+                    printf("back to case 5\n");
+                    memset(writeBuffer, 0, sizeof(writeBuffer));
+                    break;
+                case 6:
+                    modify_student(client_FD);
+                    printf("back to case 6\n");
+                    memset(writeBuffer, 0, sizeof(writeBuffer));
+                    break;
+                default:
+                    printf("add menu later\n");
+                    exit(0);
+            }
+            printf("continue or not\n");
+            strcat(writeBuffer, "Do you wish to operate admin menu again: yes/no: \n");
+            printf("write case out1\n");
+            if(write(client_FD , writeBuffer , strlen(writeBuffer)) == -1)
+                perror("write error");
+            printf("write case out2\n");
+            memset(readBuffer, 0, sizeof(readBuffer));
+            printf("write case out3\n");
+            if(read(client_FD , readBuffer , sizeof(readBuffer))==-1)
+                perror("read error");
+            printf("last line\n");
+        } while(strcmp(readBuffer , "yes") == 0);
+    }
+    //else
+    //{
+        //wrong credentials
+        //exit
+    //}
+//}
+// ADD STUDENT MODULE
 void add_student(int client_FD)
 {
     
@@ -87,7 +140,7 @@ void add_student(int client_FD)
         // Handle the error, maybe exit the function or the program
         return;
     }
-    //adding student roll number
+    //ADD STUDENT ROLL NUMBER
     memset(writeBuffer, 0, sizeof(writeBuffer)); // to clear writeBuffer content
     memset(readBuffer, 0, sizeof(readBuffer));  //to clear readbuffer content
     if(write(client_FD,STUDENT_ROLL, strlen(STUDENT_ROLL)) == -1)
@@ -99,7 +152,7 @@ void add_student(int client_FD)
         strcpy(stud.roll,readBuffer);
     }
     
-    //adding student name
+    //ADD STUDENT NAME
     memset(writeBuffer, 0, sizeof(writeBuffer)); // to clear writeBuffer content
     memset(readBuffer, 0, sizeof(readBuffer));  //to clear readbuffer content
     if(write(client_FD,STUDENT_NAME, strlen(STUDENT_NAME)) == -1)
@@ -112,7 +165,7 @@ void add_student(int client_FD)
         strcpy(stud.name , readBuffer);
     }
     
-    //adding student age
+    //ADD STUDENT AGE
     memset(writeBuffer, 0, sizeof(writeBuffer)); // to clear writeBuffer content
     memset(readBuffer, 0, sizeof(readBuffer));  //to clear readbuffer content
     if(write(client_FD,STUDENT_AGE, strlen(STUDENT_AGE)) == -1)
@@ -125,7 +178,7 @@ void add_student(int client_FD)
         strcpy(stud.age , readBuffer);
     }
     
-    //adding student location
+    //ADD STUDENT LOCATION
     memset(writeBuffer, 0, sizeof(writeBuffer)); // to clear writeBuffer content
     memset(readBuffer, 0, sizeof(readBuffer));  //to clear readbuffer content;
     if(write(client_FD,STUDENT_LOCATION, strlen(STUDENT_LOCATION)) == -1)
@@ -150,12 +203,8 @@ void add_student(int client_FD)
         data = atoi(temp.loginid);
         // Increment the integer
         ++data;
-        
-        //lseek(student_fd, 0, SEEK_END);
     }
-        // Move file pointer to the end of the file
-        
-        // Convert the incremented integer back to string and store it in loginid
+    // Convert the incremented integer back to string and store it in loginid
     sprintf(stud.loginid, "%d",data);
     // writing student info in db file
     lseek(student_fd, 0, SEEK_END );
@@ -347,6 +396,4 @@ void modify_student(int client_FD)
     memset(writeBuffer, 0, sizeof(writeBuffer));
     write(student_fd,&modify_stud, sizeof(struct student));
     close(student_fd);
-    
 }
-

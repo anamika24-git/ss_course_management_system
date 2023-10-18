@@ -8,6 +8,8 @@
 
 #include "server_macro.h"
 #include "admin_functionality.h"
+#include "student_functionality.h"
+#include "faculty_admin_menu.h"
 
 void client_handler(int client_FD);
 int main()
@@ -73,7 +75,7 @@ int main()
        }
 
        void client_handler(int client_FD)
-    {
+{
            printf("Hello I am server\n");
            // send first data to client
            if(write(client_FD , INITIAL_SETUP , strlen(INITIAL_SETUP)) == -1) {
@@ -82,34 +84,33 @@ int main()
            char readBuffer[1000] , writeBuffer[1000];
            ssize_t readBytes , writeBytes;
            int choice;
-         
-               bzero(readBuffer , sizeof(readBuffer));
-               readBytes = read(client_FD , readBuffer , sizeof(readBuffer));
-               if(readBytes == -1)
-               {
-                   perror("read system call error : while reading user input from client\n");
-               }
-               else if(readBytes == 0)
-                          printf("No data received from client\n");
-               else
-                   choice = atoi(readBuffer);
-               switch(choice)
-               {
-                   case 1:
-                       admin_menu(client_FD);
-                       break;
-                   case 2:
-                       printf("student\n");
-                       break;
-                   case 3:
-                       printf("faculty\n");;
-                       break;
-                   default:
-                       printf("please enter valid input\n");
-                       exit(0);
-               }
-                          
-        }
+           
+           bzero(readBuffer , sizeof(readBuffer));
+           readBytes = read(client_FD , readBuffer , sizeof(readBuffer));
+           if(readBytes == -1)
+           {
+               perror("read system call error : while reading user input from client\n");
+           }
+           else if(readBytes == 0)
+               printf("No data received from client\n");
+           else
+               choice = atoi(readBuffer);
+           switch(choice)
+           {
+               case 1:
+                   admin_menu(client_FD);
+                   break;
+               case 2:
+                   student_menu(client_FD);
+                   break;
+               case 3:
+                   faculty_menu(client_FD);
+                   break;
+               default:
+                   printf("please enter valid input\n");
+                   exit(0);
+           }
+       }
            
     
     

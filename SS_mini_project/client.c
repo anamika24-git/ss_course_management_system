@@ -66,6 +66,7 @@ void connection_handler(int client_FD) {
             printf("=======Thank you for using our portal======\n");
             printf("No error received from server! Closing the connection to the server now!\n");
         } else {
+            if(strcmp(read_buffer , "end") == 0) break;
             printf("%s", read_buffer);
             fflush(stdin);
             scanf("%[^\n]", write_buffer);
